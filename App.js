@@ -1,38 +1,42 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
 
-var userInputs = [];
-
-class SelectedSquare extends React.Component{
-    render(){
-      return(
-      <View>
-        <View style={[styles.selectedLine, {transform: [{translateX: this.props.area.startX - 3}]}] }></View>
-        <View style={[styles.selectedLine, {transform: [{translateX: this.props.area.endX}]}]}></View>
-        <View style={[styles.selectedLine, {transform: [{translateY: this.props.area.startY - 3}]}]}></View>
-        <View style={[styles.selectedLine, {transform: [{translateY: this.props.area.endY}]}]}></View>
-      </View>
-      );
-    }
-}
-
 export default class Board extends React.Component { 
   constructor(props){
     super(props);
     this.state = {
-      coordinates : area,
+      coordinates : [],
+      userInputs: [],
     };
   }
 
   boardClickHandler(e) {
     const { locationX, locationY } = e.nativeEvent;
+    const { userInputs } = this.state;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
     console.log(area.id);
-    this.setState({coordinates : area});
+    
+
+    if(area){
+      this.setState({userInputs: userInputs.concat(area.id), coordinates: area});
+    }
   }
+
+  // renderHighlight(){
+  //   if(this.state.coordinates == null){
+  //     this.setState({coordinates:{startX:0,startY:0,endY:0,endX:0,id:0,value:0}});
+  //   }
+  //   return(
+  //   <HighlightSquare area={this.state.coordinates}/>
+  //   );
+  // }
+
 
   //Main render method
   render() {
+
+    const {userInputs} = this.state
+    {console.log(userInputs)}
     return (
       <View style={styles.gameScreen}>
         <View>
@@ -151,9 +155,20 @@ export default class Board extends React.Component {
                   }
                 ]}
               />
-              {
-                <SelectedSquare area={this.state.coordinates}/>
-              }
+              {console.log(userInputs)}
+             { 
+               userInputs.map((d, i) => (
+              <HighlightSquare 
+                startX={this.state.coordinates.startX}
+                startY={this.state.coordinates.startY}
+                endX={this.state.coordinates.endX}
+                endY={this.state.coordinates.endY}
+                id={this.state.coordinates.id}
+                value={this.state.coordinates.value}
+              />
+              ))
+             }
+
             </View>
           </TouchableNativeFeedback>
         </View>
@@ -161,6 +176,19 @@ export default class Board extends React.Component {
     );
   }
 } 
+
+function HighlightSquare(props){
+  console.log(props, "this is props!");
+  const {startX,startY,endX,endY,id,value} = this.props
+  return(
+  <View>
+    <View style={[styles.selectedLine, {transform: [{translateX: startX - 3}]}] }></View>
+    <View style={[styles.selectedLine, {transform: [{translateX: endX}]}]}></View>
+    <View style={[styles.selectedLine, {transform: [{translateY: startY - 3}]}]}></View>
+    <View style={[styles.selectedLine, {transform: [{translateY: endY}]}]}></View>
+  </View>
+  );
+}
 
 //Area of squares
 const areas = [
