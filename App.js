@@ -15,6 +15,21 @@ class SelectedSquare extends React.Component{
     }
 }
 
+class InputButton extends React.Component{
+    render(){
+      return (
+        <View style={styles.inputButton}>
+            <Text>{this.props.value}</Text>
+        </View>
+      );
+    }
+}
+
+const inputButtons = [
+  [1, 2, 3, 4, 5,],
+  [6, 7, 8, 9, 'X'],
+];
+
 export default class Board extends React.Component { 
   constructor(){
     super();
@@ -48,6 +63,25 @@ export default class Board extends React.Component {
         endY={i.endY}
       />
     );
+  }
+
+  renderInputButtons(){
+    let views = [];
+    
+    for (var r = 0; r < inputButtons.length; r ++) {
+      let row = inputButtons[r];
+    
+      let inputRow = [];
+      for (var i = 0; i < row.length; i ++) {
+        let input = row[i];
+
+        inputRow.push(
+          <InputButton value={input} key={r + "-" + i} />
+        );
+      }    
+      views.push(<View style={styles.inputRow} key={"row-" + r}>{inputRow}</View>)
+    }
+    return views;
   }
 
   //Main render method
@@ -210,6 +244,9 @@ export default class Board extends React.Component {
             </View>
           </TouchableNativeFeedback>
         </View>
+        <View style={styles.inputTab}>
+              { this.renderInputButtons() }
+        </View>
       </View>
     );
   }
@@ -320,15 +357,16 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
     marginTop: 20,
   },
+
+  //Board/Grid CSS 
   board: {
-    //borderWidth: 3,
     height: 327,
     width: 327,
     backgroundColor: 'skyblue',
   },
   line: {
     backgroundColor: 'black',
-    height: 321,   //318 - (2 * 3)  : top and bottom border
+    height: 321,   
     width: 3,
     position: 'absolute',
     transform: [
@@ -341,5 +379,23 @@ const styles = StyleSheet.create({
     height: 39,
     width: 3,
     position: "absolute",
-  }
+  },
+
+
+  //CSS for input tabs, Can be changed
+  inputTab: {
+    flex: 1,
+    backgroundColor: 'grey',
+  },
+  inputButton: {
+    //flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 0.5,
+    borderColor: '#91AA9D'
+  },
+  inputRow: {
+    flex: 1,
+    flexDirection: 'row'
+  },
 });
