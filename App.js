@@ -1,7 +1,8 @@
 import React,{Component}from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
 
-let renderedInputData = [
+//Init rendered board data
+var renderedBoardData = [
   //Column 1
   {startX:3,startY:3,endX:36,endY:36,id:0,value:"0"},
   {startX:3,startY:39,endX:36,endY:72,id:0,value:"0"},
@@ -109,12 +110,15 @@ class SelectedSquare extends React.Component{
   }
 }
 
-
+//BIG TODO
+//Nate: I'm just trying to figure out if this is the right way to implement
+// the states for the button press in conjunction with the board atm 
 class InputButton extends React.Component{
 
   constructor(){
     super();
     this.state = {
+      select: false,
       userInput: null,
       area : null,
     };
@@ -133,6 +137,7 @@ class InputButton extends React.Component{
     renderedInputData = {startX:startX,startY:startY,endX:endX,endY:endY,id:id,value:this.props.value};
 
       this.setState({
+        select: true,
         userInput : value,
         area : this.props.area,
       });
@@ -145,6 +150,7 @@ class InputButton extends React.Component{
       // renderedInputData.map(obj => match.find(o => o.id === obj.id) || obj)
 
       //console.log(renderedInputData, "userinputSelectedArea");
+      //return this.state.select;
     }
 
     render(){
@@ -165,7 +171,7 @@ const inputButtons = [
   [6, 7, 8, 9, 'X'],
 ];
 
-var sudokuPuzzle = Array(81).fill(Math.floor(Math.random() * (9 - 1 + 1) + 1));
+var sudokuPuzzle = Array(81).fill( Math.floor(Math.random() * (9 - 1 + 1) + 1));
 
 //Main Board 
 export default class Board extends React.Component { 
@@ -173,21 +179,20 @@ export default class Board extends React.Component {
   constructor(){
     super();
     this.state = {
-      puzzle: sudokuPuzzle,
-      userInputs: [],
-      area: {startX: 0, startY: 0, endX: 36, endY: 36, id: 0, value: ""},
+      puzzle: sudokuPuzzle, //solved sudoku Puzzle array
+      select: false,        //If true, input button sends selected input to selected square
+      userInputs: [],       //unsolved sudoku Puzzle array with empty spots for user entry 
+      area: {startX: 0, startY: 0, endX: 36, endY: 36, id: 0, value: ""}, //default selected area on board
     };
   }
 
+  //Handles board presses and grabs input from inputbuttons if triggered
   boardClickHandler(e) {
-    //const {userInputs} = this.state.userInputs;
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
-    console.log(area.id);
+    //console.log(area.id);
    
-    //console.log(this.state.area);
     this.setState({
-      //userInputs: userInputs,
       area: area,
     });
   }
@@ -195,12 +200,11 @@ export default class Board extends React.Component {
   renderBoardData(){
     let puzzle = [];
     let xMid, yMid, value; 
+
     function getPuzzle(){
-      for(let i = 0; i < renderedInputData.length; i++){
-        xMid = Math.floor(((renderedInputData[i].startX + renderedInputData[i].endX)) /2) -13;
-        yMid = Math.floor(((renderedInputData[i].startY + renderedInputData[i].endY) /2)) -16;
-        //console.log(xMid);
-        //console.log(yMid);
+      for(let i = 0; i < renderedBoardData.length; i++){
+        xMid = Math.floor(((renderedBoardData[i].startX + renderedBoardData[i].endX)) /2) -13;
+        yMid = Math.floor(((renderedBoardData[i].startY + renderedBoardData[i].endY) /2)) -16;
         value = sudokuPuzzle[i];
         puzzle.push(
           <View key={i}>
@@ -210,6 +214,7 @@ export default class Board extends React.Component {
       }
       return puzzle;
     }
+
     return(
       getPuzzle()
     );
@@ -407,12 +412,18 @@ export default class Board extends React.Component {
                   ]}
                 />
               </View>
-              {
-                this.selectSquare(this.state.area)
-              }
+              <View>
               {
                 this.renderBoardData()
               }
+              </View>
+              <View style={styles.board}>
+                <View>
+                {
+                  this.selectSquare(this.state.area)
+                }
+                </View>
+              </View>
             </View>
           </TouchableNativeFeedback>
         </View>
