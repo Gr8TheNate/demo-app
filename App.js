@@ -1,7 +1,6 @@
 import React,{Component}from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
 
-
 //  let renderedInputData =  [
 //     //Column 1
 //     {startX: 0, startY: 0, endX: 36.3, endY: 36.3, id: 1, value: ""},
@@ -405,10 +404,9 @@ export default class Board extends React.Component {
           </TouchableNativeFeedback>
         </View>
         <View style={styles.inputTab}>
-              { 
-              this.renderInputButtons(this.state.area)
-              }
-             
+          { 
+            this.renderInputButtons(this.state.area)
+          } 
         </View>
         </Image>
       </View>
@@ -423,42 +421,42 @@ class BlinkingClass extends Component {
       showText: true,
       seconds:0,
       minutes:0,
-    };
+  };
 
-    // Change the state every second or the time given by User.
-    setInterval(() => {
-      this.setState({
-          seconds: (this.state.seconds < 59 ? this.state.seconds + 1 : 0),
-          minutes: (this.state.seconds == 59 ? this.state.minutes + 1 : this.state.minutes),
-      });
-    }, 
-    // Define any blinking time.
-    1000);
-  }  
-   render() {
-    
-      let displaySec = this.state.seconds;
-      let displayMin = this.state.minutes;
+  // Change the state every second or the time given by User.
+  setInterval(() => {
+    this.setState({
+        seconds: (this.state.seconds < 59 ? this.state.seconds + 1 : 0),
+        minutes: (this.state.seconds == 59 ? this.state.minutes + 1 : this.state.minutes),
+    });
+  }, 
+  // Define any blinking time.
+  1000);
+  }
 
-      function displaySeconds(){
-        if(displayMin < 10 && displaySec < 10){
-          return "0" + displayMin + ":0" + displaySec;
-        } 
-        // else if(displayMin < 10 && displaySec >= 10){
-        //   return "0" + displayMin + ":" + displaySec;
-        // }
-        // else if(displayMin >= 10 && displaySec < 10){
-        //   return displayMin + ":0" + displaySec;
-        // } 
-        else {
-          return displayMin + ":" + displaySec;
-        }
+  render() { 
+    let displaySec = this.state.seconds;
+    let displayMin = this.state.minutes;
+
+    function displaySeconds(){
+      if(displayMin < 10 && displaySec < 10){
+        return "0" + displayMin + ":0" + displaySec;
+      } 
+      else if(displayMin < 10 && displaySec >= 10){
+          return "0" + displayMin + ":" + displaySec;
       }
-
-      return (
-        <Text style = {{ textAlign: 'center', marginTop : 10,color:'white',fontSize:32 }}>{displaySeconds()}</Text>
-      );
+      else if(displayMin >= 10 && displaySec < 10){
+        return displayMin + ":0" + displaySec;
+      } 
+      else {
+        return displayMin + ":" + displaySec;
+      }
     }
+
+    return (
+      <Text style = {{ textAlign: 'center', marginTop : 10,color:'white',fontSize:32 }}>{displaySeconds()}</Text>
+    );
+  }
 }
 
 //Area of squares
