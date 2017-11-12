@@ -151,7 +151,7 @@ class InputButton extends React.Component{
       let value = (this.props.value).toString();
       return (
         <View>
-          <Button
+          <Button style={styles.inputButtonStyle}
             onPress={() => { this.assignPressValue(value)}}
             title={value}
           />
@@ -416,10 +416,10 @@ export default class Board extends React.Component {
             </View>
           </TouchableNativeFeedback>
         </View>
-        <View style={styles.inputTab}>
-          { 
-            this.renderInputButtons(this.state.area)
-          } 
+        <View style={styles.userInputContainer}>
+              { 
+              this.renderInputButtons(this.state.area)
+              }
         </View>
         </Image>
       </View>
@@ -608,23 +608,23 @@ const styles = StyleSheet.create({
   },
 
 
-  //CSS for input tabs, Can be changed
-  inputTab: {
-    flex: 1,
-  },
-  inputButton: {
-    //flex: 1,
+  //CSS for input buttons, Can be changed
+  inputButtonStyle: {
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#91AA9D',
+    width:"20px",
+    height:"20px",
+    backgroundColor: "green",
     // position: "absolute",
     // left:"100px",
     // top:"100px",
   },
+
   inputRow: {
-    flex: 1,
-    flexDirection: 'row'
+    flex: 3,
+    flexDirection: 'column'
   },
   formatData:{ 
     position: 'absolute',
@@ -652,5 +652,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     color:'white',
   },
-
+  userInputContainer:{
+    flex:1,
+    flexDirection:'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+   backgroundColor: 'green',
+   opacity: .7,
+  },
 });
