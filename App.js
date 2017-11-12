@@ -176,28 +176,10 @@ export default class Board extends React.Component {
     };
   }
 
-  fillBoard(i){
-    //console.log(this.state.puzzle);
-    
-    var puzzle = [];
-    for(let j = 0; i < this.state.puzzle.length; i++){
-      puzzle.push(
-        <Square
-          x={i.x}
-          y={i.y}
-          value={this.state.puzzle[j]}
-        />
-      )
-    }
-    console.log(puzzle);
-    return puzzle;
-  }
-
   boardClickHandler(e) {
     //const {userInputs} = this.state.userInputs;
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
-
     console.log(area.id);
     //userInputs[0] = area;
     console.log(this.state.area);
@@ -208,8 +190,8 @@ export default class Board extends React.Component {
   }
 
   renderBoardData(){
-    let xMid = Math.floor(((renderedInputData.startX + renderedInputData.endX)) /2) -7;
-    let yMid = Math.floor(((renderedInputData.startY + renderedInputData.endY) /2)) -15;
+    let xMid = Math.floor(((renderedInputData.startX + renderedInputData.endX)) /2) -10;
+    let yMid = Math.floor(((renderedInputData.startY + renderedInputData.endY) /2)) -14;
     console.log(xMid);
     console.log(yMid);
     let value = (renderedInputData.value).toString();
@@ -412,18 +394,6 @@ export default class Board extends React.Component {
                   }
                 ]}
               />
-              <View 
-                style={[styles.line,
-                  {
-                    height: 3,
-                    width: 327,
-                    transform: [{translateX: 0}, {translateY: 324}]
-                  }
-                ]}
-              />
-              {
-                this.fillBoard(squares)
-              }
               {
                 this.selectSquare(this.state.area)
               }
@@ -446,19 +416,20 @@ export default class Board extends React.Component {
   }
 } 
 
-
 class BlinkingClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showText: true,
-      time:0,
+      seconds:0,
+      minutes:0,
     };
 
     // Change the state every second or the time given by User.
     setInterval(() => {
       this.setState({
-          time: this.state.time + 1,
+          seconds: (this.state.seconds < 59 ? this.state.seconds + 1 : 0),
+          minutes: (this.state.seconds == 59 ? this.state.minutes + 1 : this.state.minutes),
       });
     }, 
     // Define any blinking time.
@@ -466,9 +437,26 @@ class BlinkingClass extends Component {
   }  
    render() {
     
-      let display = this.state.time;
+      let displaySec = this.state.seconds;
+      let displayMin = this.state.minutes;
+
+      function displaySeconds(){
+        if(displayMin < 10 && displaySec < 10){
+          return "0" + displayMin + ":0" + displaySec;
+        } 
+        // else if(displayMin < 10 && displaySec >= 10){
+        //   return "0" + displayMin + ":" + displaySec;
+        // }
+        // else if(displayMin >= 10 && displaySec < 10){
+        //   return displayMin + ":0" + displaySec;
+        // } 
+        else {
+          return displayMin + ":" + displaySec;
+        }
+      }
+
       return (
-        <Text style = {{ textAlign: 'center', marginTop : 10,color:'white',fontSize:32 }}>{display}</Text>
+        <Text style = {{ textAlign: 'center', marginTop : 10,color:'white',fontSize:32 }}>{displaySeconds()}</Text>
       );
     }
 }
@@ -575,6 +563,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 2,
     alignSelf: 'center',
+    //justifyContent: 'center',
     marginTop: 20,
   },
 
