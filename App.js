@@ -196,9 +196,7 @@ export default class Board extends React.Component {
     let value = (renderedInputData.value).toString();
     return(
       <View>
-      <Text style={[styles.formatData, {transform : [{translateX: xMid},{translateY: yMid}]}]}> {value} </Text>
-                 
-              
+        <Text style={[styles.formatData, {transform : [{translateX: xMid},{translateY: yMid}]}]}> {value} </Text>     
       </View>
     )
  
@@ -403,18 +401,10 @@ export default class Board extends React.Component {
             </View>
           </TouchableNativeFeedback>
         </View>
-<<<<<<< HEAD
         <View style={styles.userInputContainer}>
               { 
               this.renderInputButtons(this.state.area)
               }
-             
-=======
-        <View style={styles.inputTab}>
-          { 
-            this.renderInputButtons(this.state.area)
-          } 
->>>>>>> 0660c18e3f0d86bfe073f7f37458d26df4981f96
         </View>
         </Image>
       </View>
