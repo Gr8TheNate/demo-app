@@ -1,7 +1,6 @@
 import React,{Component}from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
 
-
 //  let renderedInputData =  [
 //     //Column 1
 //     {startX: 0, startY: 0, endX: 36.3, endY: 36.3, id: 1, value: ""},
@@ -190,8 +189,8 @@ export default class Board extends React.Component {
   }
 
   renderBoardData(){
-    let xMid = Math.floor(((renderedInputData.startX + renderedInputData.endX)) /2) -7;
-    let yMid = Math.floor(((renderedInputData.startY + renderedInputData.endY) /2)) -15;
+    let xMid = Math.floor(((renderedInputData.startX + renderedInputData.endX)) /2) -10;
+    let yMid = Math.floor(((renderedInputData.startY + renderedInputData.endY) /2)) -14;
     console.log(xMid);
     console.log(yMid);
     let value = (renderedInputData.value).toString();
@@ -404,11 +403,18 @@ export default class Board extends React.Component {
             </View>
           </TouchableNativeFeedback>
         </View>
+<<<<<<< HEAD
         <View style={styles.userInputContainer}>
               { 
               this.renderInputButtons(this.state.area)
               }
              
+=======
+        <View style={styles.inputTab}>
+          { 
+            this.renderInputButtons(this.state.area)
+          } 
+>>>>>>> 0660c18e3f0d86bfe073f7f37458d26df4981f96
         </View>
         </Image>
       </View>
@@ -416,31 +422,49 @@ export default class Board extends React.Component {
   }
 } 
 
-
 class BlinkingClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showText: true,
-      time:0,
-    };
+      seconds:0,
+      minutes:0,
+  };
 
-    // Change the state every second or the time given by User.
-    setInterval(() => {
-      this.setState({
-          time: this.state.time + 1,
-      });
-    }, 
-    // Define any blinking time.
-    1000);
-  }  
-   render() {
-    
-      let display = this.state.time;
-      return (
-        <Text style = {{ textAlign: 'center', marginTop : 10,color:'white',fontSize:32 }}>{display}</Text>
-      );
+  // Change the state every second or the time given by User.
+  setInterval(() => {
+    this.setState({
+        seconds: (this.state.seconds < 59 ? this.state.seconds + 1 : 0),
+        minutes: (this.state.seconds == 59 ? this.state.minutes + 1 : this.state.minutes),
+    });
+  }, 
+  // Define any blinking time.
+  1000);
+  }
+
+  render() { 
+    let displaySec = this.state.seconds;
+    let displayMin = this.state.minutes;
+
+    function displaySeconds(){
+      if(displayMin < 10 && displaySec < 10){
+        return "0" + displayMin + ":0" + displaySec;
+      } 
+      else if(displayMin < 10 && displaySec >= 10){
+          return "0" + displayMin + ":" + displaySec;
+      }
+      else if(displayMin >= 10 && displaySec < 10){
+        return displayMin + ":0" + displaySec;
+      } 
+      else {
+        return displayMin + ":" + displaySec;
+      }
     }
+
+    return (
+      <Text style = {{ textAlign: 'center', marginTop : 10,color:'white',fontSize:32 }}>{displaySeconds()}</Text>
+    );
+  }
 }
 
 //Area of squares
