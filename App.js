@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component}from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
 
 
@@ -167,6 +167,7 @@ const inputButtons = [
 ];
 
 export default class Board extends React.Component { 
+
   constructor(){
     super();
     this.state = {
@@ -174,8 +175,6 @@ export default class Board extends React.Component {
       area: {startX: 0, startY: 0, endX: 36, endY: 36, id: 0, value: ""},
     };
   }
-
- 
 
   boardClickHandler(e) {
     //const {userInputs} = this.state.userInputs;
@@ -244,6 +243,9 @@ export default class Board extends React.Component {
           <Image style={styles.background} source={require('./assets/background1.png')}>
         <View>
           <Text>Test</Text>
+        </View>
+        <View style={styles.timer}>
+           <BlinkingClass/>
         </View>
         <View style={styles.container}>
           <TouchableNativeFeedback onPress={e => this.boardClickHandler(e)}>
@@ -414,6 +416,33 @@ export default class Board extends React.Component {
   }
 } 
 
+
+class BlinkingClass extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showText: true,
+      time:0,
+    };
+
+    // Change the state every second or the time given by User.
+    setInterval(() => {
+      this.setState({
+          time: this.state.time + 1,
+      });
+    }, 
+    // Define any blinking time.
+    1000);
+  }  
+   render() {
+    
+      let display = this.state.time;
+      return (
+        <Text style = {{ textAlign: 'center', marginTop : 10,color:'white',fontSize:32 }}>{display}</Text>
+      );
+    }
+}
+
 //Area of squares
 const areas = [
     //Column 1
@@ -548,7 +577,6 @@ const styles = StyleSheet.create({
   //CSS for input tabs, Can be changed
   inputTab: {
     flex: 1,
-    backgroundColor: 'grey',
   },
   inputButton: {
     //flex: 1,
@@ -556,9 +584,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#91AA9D',
-    position: "absolute",
-    left:"100px",
-    top:"100px",
+    // position: "absolute",
+    // left:"100px",
+    // top:"100px",
   },
   inputRow: {
     flex: 1,
@@ -580,6 +608,15 @@ const styles = StyleSheet.create({
     flex:1,
     width: '100%',
     height:'100%',
+  },
+
+  timer:{
+    backgroundColor:'black',
+    height:50,
+  },
+  textUp:{
+    flexDirection: 'column',
+    color:'white',
   },
 
 });
