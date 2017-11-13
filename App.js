@@ -224,7 +224,7 @@ export default class Board extends React.Component {
   boardClickHandler(e) {
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
-    //console.log(area.id);
+    console.log(area.id);
     var puzzle = this.state.puzzle;
 
     this.setState({
@@ -240,37 +240,7 @@ export default class Board extends React.Component {
 
   }
 
-  // renderBoardData(){
-  //   let newPuzzle = [];
-  //   let x1, y1, value; 
 
-  //   for(let i = 0; i < renderedBoardData.length; i++){
-  //     x1 = renderedBoardData[i].startX;
-  //     y1 = renderedBoardData[i].startY;
-  //     value = sudokuPuzzle[i];
-  //     newPuzzle.push(
-  //       <Square key={i} startX={x1} startY={y1} value={value} />
-  //     );
-  //   }  
-    
-  //   // this.setState({
-  //   //   puzzle: newPuzzle,
-  //   // });
-
-  //   return newPuzzle;
-  // }
-
-  // selectSquare(i){
-  //   return(
-  //     <SelectedSquare
-  //       key={i.id}
-  //       startX={i.startX}
-  //       startY={i.startY}
-  //       endX={i.endX}
-  //       endY={i.endY}
-  //     />
-  //   );
-  // }
 
 
   renderInputButtons(){
@@ -304,214 +274,212 @@ export default class Board extends React.Component {
            <BlinkingClass/>
         </View>
         <View style={styles.container}>
-          <TouchableNativeFeedback onPress={e => this.boardClickHandler(e)}>
-            <View key={"board"} style={styles.board}>
-              <View key={"grid"}>
-                <View 
-                  key={"left border"}
-                  style={[styles.line,
-                    {
-                      width:0,
-                      height: 327,
-                      transform: [{translateX: 0}, {translateY: 0}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"vert 1"}
-                  style={styles.line}
-                />
-                <View 
-                  key={"vert 2"}
-                  style={[styles.line,
-                    {transform : [{translateX: 73},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 3 bold"}
-                  style={[styles.line,
-                    {
-                      width: 3,
-                      transform : [{translateX: 108},{translateY: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"vert 4"}
-                  style={[styles.line,
-                    {transform : [{translateX: 145},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 5"}
-                  style={[styles.line,
-                    {transform : [{translateX: 181},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 6 bold"}
-                  style={[styles.line,
-                    {
-                      width: 3,
-                      transform : [{translateX: 216},{translateY: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"vert 7"}
-                  style={[styles.line,
-                    {transform : [{translateX: 253},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 8"}
-                  style={[styles.line,
-                    {transform : [{translateX: 289},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"right border"}
-                  style={[styles.line,
-                    {
-                      width: 0,
-                      height: 327,
-                      transform: [{translateX: 324}, {translateY: 0}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"top border"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 0,
-                      width: 327,
-                      transform: [{translateX: 0}, {translateY: 0}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 1"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      // transform : [{translateY: 36},{translateX: 3}]
-                      transform : [{translateY: 37},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 2"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 72},{translateX: 3}]
-                      transform : [{translateY: 73},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 3 bold"}
-                  style={[styles.line, 
-                    {
-                      height: 3,
-                      width: 321,
-                      transform : [{translateY: 108},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                key={"horizon 4"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 144},{translateX: 3}]
-                      transform : [{translateY: 145},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 5"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 180},{translateX: 3}]
-                      transform : [{translateY: 181},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 6 bold"}
-                  style={[styles.line,
-                    {
-                      height: 3,
-                      width: 321,
-                      //transform : [{translateY: 216},{translateX: 3}]
-                      transform : [{translateY: 217},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 7"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 252},{translateX: 3}]
-                      transform : [{translateY: 253},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 8"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 288},{translateX: 3}]
-                      transform : [{translateY: 289},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"bottom border"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 0,
-                      width: 327,
-                      transform: [{translateX: 0}, {translateY: 324}]
-                    }
-                  ]}
-                />
+        <TouchableNativeFeedback key={"touchable grid"} onPress={e => this.boardClickHandler(e)}>
+          <View style={styles.board}>
+          <View key={"squares"}style={styles.board}>
+                {
+                //TODO!!!!
+                  this.state.puzzle.map((x,i) => {
+                    if(i<81){
+                      return this.state.puzzle[i]; 
+                    }  
+                  })
+                }  
+                <View key={"grid"}>
+                  <View 
+                    key={"left border"}
+                    style={[styles.line,
+                      {
+                        width:0,
+                        height: 327,
+                        transform: [{translateX: 0}, {translateY: 0}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"vert 1"}
+                    style={styles.line}
+                  />
+                  <View 
+                    key={"vert 2"}
+                    style={[styles.line,
+                      {transform : [{translateX: 73},{translateY: 3}]}
+                    ]}
+                  />
+                  <View 
+                    key={"vert 3 bold"}
+                    style={[styles.line,
+                      {
+                        width: 3,
+                        transform : [{translateX: 108},{translateY: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"vert 4"}
+                    style={[styles.line,
+                      {transform : [{translateX: 145},{translateY: 3}]}
+                    ]}
+                  />
+                  <View 
+                    key={"vert 5"}
+                    style={[styles.line,
+                      {transform : [{translateX: 181},{translateY: 3}]}
+                    ]}
+                  />
+                  <View 
+                    key={"vert 6 bold"}
+                    style={[styles.line,
+                      {
+                        width: 3,
+                        transform : [{translateX: 216},{translateY: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"vert 7"}
+                    style={[styles.line,
+                      {transform : [{translateX: 253},{translateY: 3}]}
+                    ]}
+                  />
+                  <View 
+                    key={"vert 8"}
+                    style={[styles.line,
+                      {transform : [{translateX: 289},{translateY: 3}]}
+                    ]}
+                  />
+                  <View 
+                    key={"right border"}
+                    style={[styles.line,
+                      {
+                        width: 0,
+                        height: 327,
+                        transform: [{translateX: 324}, {translateY: 0}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"top border"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 0,
+                        width: 327,
+                        transform: [{translateX: 0}, {translateY: 0}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"horizon 1"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 1,
+                        width: 321,
+                        // transform : [{translateY: 36},{translateX: 3}]
+                        transform : [{translateY: 37},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"horizon 2"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 1,
+                        width: 321,
+                        //transform : [{translateY: 72},{translateX: 3}]
+                        transform : [{translateY: 73},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"horizon 3 bold"}
+                    style={[styles.line, 
+                      {
+                        height: 3,
+                        width: 321,
+                        transform : [{translateY: 108},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                  key={"horizon 4"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 1,
+                        width: 321,
+                        //transform : [{translateY: 144},{translateX: 3}]
+                        transform : [{translateY: 145},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"horizon 5"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 1,
+                        width: 321,
+                        //transform : [{translateY: 180},{translateX: 3}]
+                        transform : [{translateY: 181},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"horizon 6 bold"}
+                    style={[styles.line,
+                      {
+                        height: 3,
+                        width: 321,
+                        //transform : [{translateY: 216},{translateX: 3}]
+                        transform : [{translateY: 217},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"horizon 7"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 1,
+                        width: 321,
+                        //transform : [{translateY: 252},{translateX: 3}]
+                        transform : [{translateY: 253},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"horizon 8"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 1,
+                        width: 321,
+                        //transform : [{translateY: 288},{translateX: 3}]
+                        transform : [{translateY: 289},{translateX: 3}]
+                      }
+                    ]}
+                  />
+                  <View 
+                    key={"bottom border"}
+                    style={[styles.line,
+                      {
+                        //height: 3,
+                        height: 0,
+                        width: 327,
+                        transform: [{translateX: 0}, {translateY: 324}]
+                      }
+                    ]}
+                  />
+                </View>
               </View>
-              {
-                //TODO!!!!!
-                //this.renderBoardData()
-                this.state.puzzle.map((x,i) => {
-                  if(i<81)
-                    return this.state.puzzle[i];
-                })
-              }
-              {
-              /*<View style={styles.board}> 
-              {
-                this.selectSquare(this.state.area)
-              }  
-              </View>
-              */} 
-            </View>
-          </TouchableNativeFeedback>
+          </View>
+        </TouchableNativeFeedback>  
+
+              
+
         </View>
         <View style={styles.userInputContainer}>
           { 
