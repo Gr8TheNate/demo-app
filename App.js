@@ -4,15 +4,15 @@ import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableNativeFeedb
 //Init rendered board data
 var renderedBoardData = [
   //Column 1
-  {startX:3,startY:3,endX:36,endY:36,id:0,value:"0"},
-  {startX:3,startY:39,endX:36,endY:72,id:0,value:"0"},
-  {startX:3,startY:75,endX:36,endY:108,id:0,value:"0"},
-  {startX:3,startY:111,endX:36,endY:144,id:0,value:"0"},
-  {startX:3,startY:147,endX:36,endY:180,id:0,value:"0"},
-  {startX:3,startY:183,endX:36,endY:216,id:0,value:"0"},
-  {startX:3,startY:219,endX:36,endY:252,id:0,value:"0"},
-  {startX:3,startY:255,endX:36,endY:288,id:0,value:"0"},
-  {startX:3,startY:291,endX:36,endY:324,id:0,value:"0"},
+  {startX:3,startY:3,endX:36,endY:36,id:1,value:"0"},
+  {startX:3,startY:39,endX:36,endY:72,id:2,value:"0"},
+  {startX:3,startY:75,endX:36,endY:108,id:3,value:"0"},
+  {startX:3,startY:111,endX:36,endY:144,id:4,value:"0"},
+  {startX:3,startY:147,endX:36,endY:180,id:5,value:"0"},
+  {startX:3,startY:183,endX:36,endY:216,id:6,value:"0"},
+  {startX:3,startY:219,endX:36,endY:252,id:7,value:"0"},
+  {startX:3,startY:255,endX:36,endY:288,id:8,value:"0"},
+  {startX:3,startY:291,endX:36,endY:324,id:9,value:"0"},
   //Column 2
   {startX:39,startY:3,endX:72,endY:36,id:0,value:"0"},
   {startX:39,startY:39,endX:72,endY:72,id:0,value:"0"},
@@ -96,15 +96,31 @@ var renderedBoardData = [
 ];
 
 //Highlighted Square drawn onto board
-class SelectedSquare extends React.Component{
+// class SelectedSquare extends React.Component{
+//   render(){
+//     const { startX, startY, endX, endY, id, value} = this.props;
+//     return(
+//       <View>
+//         <View style={[styles.selectedLine, {transform: [{translateX: startX ? Math.floor(startX)-1 : 0 },{translateY: startY ? Math.floor(startY) : 0 }]}] }/>
+//         <View style={[styles.selectedLine, {transform: [{translateX: endX ? (Math.floor(endX)-1) : 36 },{translateY: startY ? Math.floor(startY) : 0 }]}]}/>
+//         <View style={[styles.selectedLine, {height: 3, width: 39, transform: [{translateY: startY ? Math.floor(startY) : 0 },{translateX: startX ? Math.floor(startX) - 1 : 0 }]}]}/>
+//         <View style={[styles.selectedLine, {height: 3, width: 39, transform: [{translateY: endY ? Math.floor(endY) : 36 },{translateX: startX ? Math.floor(startX) - 1 : 0 }]}]}/>
+//       </View>
+//     );
+//   }
+// }
+
+//Square that receives value from the puzzle or player
+class Square extends React.Component {
   render(){
-    const { startX, startY, endX, endY, id, value} = this.props;
+    const { startX, startY, id, value, select} = this.props;
     return(
-      <View>
-        <View style={[styles.selectedLine, {transform: [{translateX: startX ? Math.floor(startX)-1 : 0 },{translateY: startY ? Math.floor(startY) : 0 }]}] }/>
-        <View style={[styles.selectedLine, {transform: [{translateX: endX ? (Math.floor(endX)-1) : 36 },{translateY: startY ? Math.floor(startY) : 0 }]}]}/>
-        <View style={[styles.selectedLine, {height: 3, width: 39, transform: [{translateY: startY ? Math.floor(startY) : 0 },{translateX: startX ? Math.floor(startX) - 1 : 0 }]}]}/>
-        <View style={[styles.selectedLine, {height: 3, width: 39, transform: [{translateY: endY ? Math.floor(endY) : 36 },{translateX: startX ? Math.floor(startX) - 1 : 0 }]}]}/>
+      <View style={[styles.square,{
+        borderWidth: (select ? 3 : 0),
+        borderColor: "yellow", 
+        transform: [{translateX: startX}, {translateY: startY}]
+      }]}>
+        <Text style={{textAlign: "center"}}> {value} </Text>
       </View>
     );
   }
@@ -171,7 +187,8 @@ const inputButtons = [
   [6, 7, 8, 9, 'X'],
 ];
 
-var sudokuPuzzle = Array(81).fill( Math.floor(Math.random() * (9 - 1 + 1) + 1));
+var sudokuPuzzle = Array(81).fill(Math.floor(Math.random() * (9 - 1 + 1) + 1));
+
 
 //Main Board 
 export default class Board extends React.Component { 
@@ -179,59 +196,82 @@ export default class Board extends React.Component {
   constructor(){
     super();
     this.state = {
-      puzzle: sudokuPuzzle, //solved sudoku Puzzle array
+      puzzle: renderBoardData(), //sudoku Puzzle array
       select: false,        //If true, input button sends selected input to selected square
       userInputs: [],       //unsolved sudoku Puzzle array with empty spots for user entry 
-      area: {startX: 0, startY: 0, endX: 36, endY: 36, id: 0, value: ""}, //default selected area on board
+      area: {startX: 0,startY: 0, endX: 0, endY:0 ,id:0 ,value: 0},           //selected area on board
     };
+
+    //TODO!!!
+    function renderBoardData(){
+      let newPuzzle = [];
+      let x1, y1, value; 
+  
+      for(let i = 0; i < renderedBoardData.length; i++){
+        x1 = renderedBoardData[i].startX;
+        y1 = renderedBoardData[i].startY;
+        value = sudokuPuzzle[i];
+        newPuzzle.push(
+          <Square key={i} startX={x1} startY={y1} value={value} />
+        );
+      } 
+      return newPuzzle;
+    }
   }
 
+  //TODO
   //Handles board presses and grabs input from inputbuttons if triggered
   boardClickHandler(e) {
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
     //console.log(area.id);
-   
+    var puzzle = this.state.puzzle;
+
     this.setState({
+      select: true,
       area: area,
     });
+
+    // for(let i = 0; i < puzzle.length; i++){
+    //   if((puzzle[i].startX >= area.startX && puzzle[i].endX <= area.endX) && (puzzle[i].startY >= area.startY && puzzle[i].endY >= area.endY)){
+    //     puzzle[i].select = this.state.select;
+    //   }
+    // }
+
   }
 
-  renderBoardData(){
-    let puzzle = [];
-    let xMid, yMid, value; 
+  // renderBoardData(){
+  //   let newPuzzle = [];
+  //   let x1, y1, value; 
 
-    function getPuzzle(){
-      for(let i = 0; i < renderedBoardData.length; i++){
-        xMid = Math.floor(((renderedBoardData[i].startX + renderedBoardData[i].endX)) /2) -13;
-        yMid = Math.floor(((renderedBoardData[i].startY + renderedBoardData[i].endY) /2)) -16;
-        value = sudokuPuzzle[i];
-        puzzle.push(
-          <View key={i}>
-            <Text style={[styles.formatData, {transform : [{translateX: xMid},{translateY: yMid}]}]}> {value} </Text>
-          </View>
-        );
-      }
-      return puzzle;
-    }
+  //   for(let i = 0; i < renderedBoardData.length; i++){
+  //     x1 = renderedBoardData[i].startX;
+  //     y1 = renderedBoardData[i].startY;
+  //     value = sudokuPuzzle[i];
+  //     newPuzzle.push(
+  //       <Square key={i} startX={x1} startY={y1} value={value} />
+  //     );
+  //   }  
+    
+  //   // this.setState({
+  //   //   puzzle: newPuzzle,
+  //   // });
 
-    return(
-      getPuzzle()
-    );
- 
-  }
+  //   return newPuzzle;
+  // }
 
-  selectSquare(i){
-    return(
-      <SelectedSquare
-        key={i.id}
-        startX={i.startX}
-        startY={i.startY}
-        endX={i.endX}
-        endY={i.endY}
-      />
-    );
-  }
+  // selectSquare(i){
+  //   return(
+  //     <SelectedSquare
+  //       key={i.id}
+  //       startX={i.startX}
+  //       startY={i.startY}
+  //       endX={i.endX}
+  //       endY={i.endY}
+  //     />
+  //   );
+  // }
+
 
   renderInputButtons(){
     let views = [];
@@ -265,90 +305,117 @@ export default class Board extends React.Component {
         </View>
         <View style={styles.container}>
           <TouchableNativeFeedback onPress={e => this.boardClickHandler(e)}>
-            <View style={styles.board}>
-              <View>
+            <View key={"board"} style={styles.board}>
+              <View key={"grid"}>
                 <View 
+                  key={"left border"}
                   style={[styles.line,
                     {
+                      width:0,
                       height: 327,
                       transform: [{translateX: 0}, {translateY: 0}]
                     }
                   ]}
                 />
                 <View 
+                  key={"vert 1"}
                   style={styles.line}
                 />
                 <View 
+                  key={"vert 2"}
                   style={[styles.line,
-                    {transform : [{translateX: 72},{translateY: 3}]}
+                    {transform : [{translateX: 73},{translateY: 3}]}
                   ]}
                 />
                 <View 
-                  style={[styles.line,
-                    {transform : [{translateX: 108},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  style={[styles.line,
-                    {transform : [{translateX: 144},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  style={[styles.line,
-                    {transform : [{translateX: 180},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  style={[styles.line,
-                    {transform : [{translateX: 216},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  style={[styles.line,
-                    {transform : [{translateX: 252},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  style={[styles.line,
-                    {transform : [{translateX: 288},{translateY: 3}]}
-                  ]}
-                />
-                <View 
+                  key={"vert 3 bold"}
                   style={[styles.line,
                     {
+                      width: 3,
+                      transform : [{translateX: 108},{translateY: 3}]
+                    }
+                  ]}
+                />
+                <View 
+                  key={"vert 4"}
+                  style={[styles.line,
+                    {transform : [{translateX: 145},{translateY: 3}]}
+                  ]}
+                />
+                <View 
+                  key={"vert 5"}
+                  style={[styles.line,
+                    {transform : [{translateX: 181},{translateY: 3}]}
+                  ]}
+                />
+                <View 
+                  key={"vert 6 bold"}
+                  style={[styles.line,
+                    {
+                      width: 3,
+                      transform : [{translateX: 216},{translateY: 3}]
+                    }
+                  ]}
+                />
+                <View 
+                  key={"vert 7"}
+                  style={[styles.line,
+                    {transform : [{translateX: 253},{translateY: 3}]}
+                  ]}
+                />
+                <View 
+                  key={"vert 8"}
+                  style={[styles.line,
+                    {transform : [{translateX: 289},{translateY: 3}]}
+                  ]}
+                />
+                <View 
+                  key={"right border"}
+                  style={[styles.line,
+                    {
+                      width: 0,
                       height: 327,
                       transform: [{translateX: 324}, {translateY: 0}]
                     }
                   ]}
                 />
                 <View 
+                  key={"top border"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 0,
                       width: 327,
                       transform: [{translateX: 0}, {translateY: 0}]
                     }
                   ]}
                 />
                 <View 
+                  key={"horizon 1"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 1,
                       width: 321,
-                      transform : [{translateY: 36},{translateX: 3}]
+                      // transform : [{translateY: 36},{translateX: 3}]
+                      transform : [{translateY: 37},{translateX: 3}]
                     }
                   ]}
                 />
                 <View 
+                  key={"horizon 2"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 1,
                       width: 321,
-                      transform : [{translateY: 72},{translateX: 3}]
+                      //transform : [{translateY: 72},{translateX: 3}]
+                      transform : [{translateY: 73},{translateX: 3}]
                     }
                   ]}
                 />
                 <View 
+                  key={"horizon 3 bold"}
                   style={[styles.line, 
                     {
                       height: 3,
@@ -358,79 +425,98 @@ export default class Board extends React.Component {
                   ]}
                 />
                 <View 
+                key={"horizon 4"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 1,
                       width: 321,
-                      transform : [{translateY: 144},{translateX: 3}]
+                      //transform : [{translateY: 144},{translateX: 3}]
+                      transform : [{translateY: 145},{translateX: 3}]
                     }
                   ]}
                 />
                 <View 
+                  key={"horizon 5"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 1,
                       width: 321,
-                      transform : [{translateY: 180},{translateX: 3}]
+                      //transform : [{translateY: 180},{translateX: 3}]
+                      transform : [{translateY: 181},{translateX: 3}]
                     }
                   ]}
                 />
                 <View 
+                  key={"horizon 6 bold"}
                   style={[styles.line,
                     {
                       height: 3,
                       width: 321,
-                      transform : [{translateY: 216},{translateX: 3}]
+                      //transform : [{translateY: 216},{translateX: 3}]
+                      transform : [{translateY: 217},{translateX: 3}]
                     }
                   ]}
                 />
                 <View 
+                  key={"horizon 7"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 1,
                       width: 321,
-                      transform : [{translateY: 252},{translateX: 3}]
+                      //transform : [{translateY: 252},{translateX: 3}]
+                      transform : [{translateY: 253},{translateX: 3}]
                     }
                   ]}
                 />
                 <View 
+                  key={"horizon 8"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 1,
                       width: 321,
-                      transform : [{translateY: 288},{translateX: 3}]
+                      //transform : [{translateY: 288},{translateX: 3}]
+                      transform : [{translateY: 289},{translateX: 3}]
                     }
                   ]}
                 />
                 <View 
+                  key={"bottom border"}
                   style={[styles.line,
                     {
-                      height: 3,
+                      //height: 3,
+                      height: 0,
                       width: 327,
                       transform: [{translateX: 0}, {translateY: 324}]
                     }
                   ]}
                 />
               </View>
-              <View>
               {
-                this.renderBoardData()
+                //TODO!!!!!
+                //this.renderBoardData()
+                this.state.puzzle.map((x,i) => {
+                  if(i<81)
+                    return this.state.puzzle[i];
+                })
               }
+              {
+              /*<View style={styles.board}> 
+              {
+                this.selectSquare(this.state.area)
+              }  
               </View>
-              <View style={styles.board}>
-                <View>
-                {
-                  this.selectSquare(this.state.area)
-                }
-                </View>
-              </View>
+              */} 
             </View>
           </TouchableNativeFeedback>
         </View>
         <View style={styles.userInputContainer}>
-              { 
-              this.renderInputButtons(this.state.area)
-              }
+          { 
+            this.renderInputButtons(this.state.area)
+          }
         </View>
         </Image>
       </View>
@@ -588,26 +674,19 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
     marginTop: 20,
   },
-  square: {
-    height:33,
-    width: 33,
-    backgroundColor: "blue",
-    opacity: .4,
-  },
+ 
   //Board/Grid CSS 
   board: {
     height: 327,
     width: 327,
-    backgroundColor: 'green',
-    opacity: .7,
   },
   line: {
     backgroundColor: 'black',
     height: 321,   
-    width: 3,
+    width: 1,
     position: 'absolute',
     transform: [
-      {translateX: 36},
+      {translateX: 37},
       {translateY: 3}
     ]
   },
@@ -616,6 +695,16 @@ const styles = StyleSheet.create({
     height: 39,
     width: 3,
     position: "absolute",
+  },
+  square: {
+    height:33,
+    width: 33,
+    backgroundColor: 'green',
+    opacity: .4,
+    position: "absolute",
+    justifyContent: "center",
+    borderRadius: 5,
+
   },
 
 
