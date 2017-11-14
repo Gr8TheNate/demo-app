@@ -4,8 +4,7 @@ import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Button } from 
 import { Sudoku } from './algorithm'
 
 //Get sudoku from sudoku Generator
-var sudokuPuzzle = Sudoku;
-
+var sudoku = Sudoku;
 
 
 //Init rendered board data
@@ -378,14 +377,21 @@ const inputButtons = [
   [6, 7, 8, 9, 'X'],
 ];
 
-var sudokuPuzzle = Array(81).fill(Math.floor(Math.random() * (9 - 1 + 1) + 1));
-
-
 //Main Board 
 export default class Board extends React.Component { 
 
   constructor(){
     super();
+
+    //sudoku.init;
+    
+    //DUMMY ARRAY
+    var solvedPuzzled = []; //sudoku.solve;
+    for(let i = 1; i <= 81; i++){
+      solvedPuzzled[i] = i%9;
+    }
+    //console.log(solvedPuzzled);
+
     this.state = {
       board: renderedBoardData,
       //puzzle: renderBoardData(), //sudoku Puzzle array
@@ -453,46 +459,13 @@ export default class Board extends React.Component {
     });
   }
 
-   async playMusic(){
+  async playMusic(){
     
     const playbackObject = await Expo.Audio.Sound.create(
        require("./assets/sounds/garden.mp3"),
       { shouldPlay: true },
     );
   }
-   
-  // renderBoardData(){
-  //   let newPuzzle = [];
-  //   let x1, y1, value; 
-
-  //   for(let i = 0; i < renderedBoardData.length; i++){
-  //     x1 = renderedBoardData[i].startX;
-  //     y1 = renderedBoardData[i].startY;
-  //     value = sudokuPuzzle[i];
-  //     newPuzzle.push(
-  //       <Square key={i} startX={x1} startY={y1} value={value} />
-  //     );
-  //   }  
-    
-  //   // this.setState({
-  //   //   puzzle: newPuzzle,
-  //   // });
-
-  //   return newPuzzle;
-  // }
-
-  // selectSquare(i){
-  //   return(
-  //     <SelectedSquare
-  //       key={i.id}
-  //       startX={i.startX}
-  //       startY={i.startY}
-  //       endX={i.endX}
-  //       endY={i.endY}
-  //     />
-  //   );
-  // }
-
 
   renderInputButtons(){
     let views = [];
@@ -516,12 +489,13 @@ export default class Board extends React.Component {
   //Main render method
   render() {
     var backgroundUrl = (this.state.background);
-    console.log(backgroundUrl);
+    //console.log(backgroundUrl);
     return (
       <View style={styles.gameScreen}>
         <Image style={styles.background} source={require('./assets/background1.png')}>
           <View>
-            <Text>Test</Text>
+            <Button style={styles.inputButtonStyle} onPress= {() =>this.playMusic()} title={"Play Music"}/>
+            <Button style={styles.inputButtonStyle} onPress= {() =>this.setBackground()} title={"backgroundButton"}/>
           </View>
           <View style={styles.timer}>
             <BlinkingClass/>
@@ -530,12 +504,6 @@ export default class Board extends React.Component {
             <View ref='board' style={styles.board}>
               <Grid/>
               {
-                //Draws squares to board
-                // this.state.puzzle.map((x,i) => {
-                //   if(i<81){
-                //     return this.state.puzzle[i];
-                //   }  
-                // })
                 this.renderBoardData(this.state.board)
               }
               <TouchableWithoutFeedback key={"touchable grid"}onPress={e => this.boardClickHandler(e)}>
