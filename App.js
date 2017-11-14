@@ -1,6 +1,8 @@
 import React,{Component}from 'react';
 import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
 
+
+
 //Init rendered board data
 var renderedBoardData = [
   //Column 1
@@ -109,7 +111,6 @@ var renderedBoardData = [
 //     );
 //   }
 // }
-
 //Square that receives value from the puzzle or player
 class Square extends React.Component {
   render(){
@@ -200,8 +201,9 @@ export default class Board extends React.Component {
       select: false,        //If true, input button sends selected input to selected square
       userInputs: [],       //unsolved sudoku Puzzle array with empty spots for user entry 
       area: {startX: 0,startY: 0, endX: 0, endY:0 ,id:0 ,value: 0},           //selected area on board
+      background :require("./assets/background1.png"),
     };
-
+   // require("./assets/background1.png")
     //TODO!!!
     function renderBoardData(){
       let newPuzzle = [];
@@ -216,8 +218,9 @@ export default class Board extends React.Component {
         );
       } 
       return newPuzzle;
-    }
+    } 
   }
+
 
   //TODO
   //Handles board presses and grabs input from inputbuttons if triggered
@@ -240,6 +243,28 @@ export default class Board extends React.Component {
 
   }
 
+  setBackground(){
+    var backgroundUrl = this.state.background;
+    if(backgroundUrl == require("./assets/background1.png")){
+      backgroundUrl = require("./assets/background2.png");
+    }
+    else{
+      backgroundUrl = require("./assets/background1.png");
+    }
+    console.log(backgroundUrl);
+    this.setState({
+      background: backgroundUrl,
+    });
+  }
+
+   async playMusic(){
+    
+    const playbackObject = await Expo.Audio.Sound.create(
+       require("./assets/sounds/garden.mp3"),
+      { shouldPlay: true },
+    );
+  }
+   
   // renderBoardData(){
   //   let newPuzzle = [];
   //   let x1, y1, value; 
@@ -294,11 +319,15 @@ export default class Board extends React.Component {
 
   //Main render method
   render() {
+    var backgroundUrl = (this.state.background);
+    console.log(backgroundUrl);
     return (
       <View style={styles.gameScreen}>
-          <Image style={styles.background} source={require('./assets/background1.png')}>
+          <Image style={styles.background} source={backgroundUrl}>
         <View>
           <Text>Test</Text>
+          <Button style={styles.inputButtonStyle} onPress= {() =>this.playMusic()} title={"Play Music"}/>
+          <Button style={styles.inputButtonStyle} onPress= {() =>this.setBackground()} title={"backgroundButton"}/>
         </View>
         <View style={styles.timer}>
            <BlinkingClass/>
