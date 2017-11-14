@@ -1,6 +1,11 @@
 import React,{Component}from 'react';
 import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Button } from 'react-native';
 
+import { Sudoku } from './algorithm'
+
+//Get sudoku from sudoku Generator
+var sudokuPuzzle = Sudoku;
+
 //Init rendered board data
 var renderedBoardData = [
   //Column 1
