@@ -379,6 +379,9 @@ var solvedPuzzle = [4,6,1,8,3,9,5,2,7,3,8,9,2,7,5,1,4,6,5,2,7,6,4,1,9,8,3,2,5,8,
 var solvedPuzzle2 = [2,1,5,4,6,9,7,3,8,4,8,7,1,3,5,6,2,9,6,9,3,8,7,2,4,1,5,8,6,2,3,4,1,5,9,7,5,4,9,2,8,7,3,6,1,7,3,1,9,5,6,2,8,4,9,2,4,5,1,3,8,7,6,1,7,8,6,2,4,9,5,3,3,5,6,7,9,8,1,4,2];
 var solvedPuzzle3 = [2,4,8,3,6,5,7,9,1,9,3,7,8,1,4,6,2,5,5,1,6,7,2,9,3,8,4,7,8,1,4,3,2,5,6,9,4,6,9,5,8,1,3,7,3,3,5,2,9,7,6,4,1,8,8,9,5,2,4,7,1,3,6,6,2,4,1,9,3,8,5,7,1,7,3,6,5,8,9,4,2];
 var unsolvedPuzzle = solvedPuzzle.slice();
+
+var boardData = renderedBoardData;
+
 for(let i = 0; i < 20; i++){
   var value = getRandom();
   unsolvedPuzzle[value] = 0;
@@ -388,7 +391,6 @@ function getRandom(){
    return Math.floor(Math.random() * 80);
 }
 
-var boardData = renderedBoardData;
 for(let x = 0; x < boardData.length; x++){
   boardData[x].value = unsolvedPuzzle[x];
   if(boardData[x].value != 0){
@@ -432,7 +434,7 @@ export default class Board extends React.Component {
     return newPuzzle;
   }
 
-  renderSolution(){
+  renderSolution(solvedPuzzle){
     let boardData = renderedBoardData;
     for(let x = 0; x < boardData.length; x++){
       boardData[x].value = solvedPuzzle[x];
@@ -452,6 +454,10 @@ export default class Board extends React.Component {
     var newBoard = this.state.board;
     var game = this.state.game;
 
+    if(game == 0) unsolvedPuzzle = solvedPuzzle.slice();
+    else if(game == 1) unsolvedPuzzle = solvedPuzzle2.slice();
+    else  unsolvedPuzzle = solvedPuzzle3.slice();
+
     if(val == 0){
       this.playClick();
 
@@ -470,11 +476,31 @@ export default class Board extends React.Component {
       selectedSquare.select = true;
     }
     else if(val == 1){
-      this.renderSolution();
+      this.renderSolution(unsolvedPuzzle);
       solved = true;
     }
     else if(val == 2){
-      this.renderBoardData(this.state.userInputs);
+      var boardData = renderedBoardData;
+      if(game == 0) var diffi = 20;
+      else if(game == 1) var diffi = 30;
+      else  var diffi = 40;
+      
+      for(let i = 0; i < (20 + diffi); i++){
+        var value = getRandom();
+        unsolvedPuzzle[value] = 0;
+      }
+      
+      function getRandom(){
+         return Math.floor(Math.random() * 80);
+      }
+      
+      for(let x = 0; x < boardData.length; x++){
+        boardData[x].value = unsolvedPuzzle[x];
+        if(boardData[x].value != 0){
+          boardData[x].locked = true;
+        }
+      }
+      this.renderBoardData(boardData);
       solved = false;
     }
 
