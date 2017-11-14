@@ -308,9 +308,16 @@ class Square extends React.Component {
         backgroundColor: (locked ? "lightgreen" : "green"),
         borderWidth: (select ? 3 : 0),
         borderColor: "yellow", 
-        transform: [{translateX: startX}, {translateY: startY}]
+        transform: [{translateX: startX}, {translateY: startY}],
       }]}>
-        <Text style={{textAlign: "center"}}> {value} </Text>
+        <Text style={{
+          textAlign: "center",
+          fontFamily: 'Roboto',
+          fontSize: 24,
+          fontWeight: 'bold',
+          opacity:1,
+          }}
+          > {value} </Text>
       </View>
     );
   }
@@ -390,7 +397,7 @@ export default class Board extends React.Component {
     for(let i = 1; i <= 81; i++){
       solvedPuzzled[i] = i%9;
     }
-    //console.log(solvedPuzzled);
+    console.log(solvedPuzzled);
 
     this.state = {
       board: renderedBoardData,
@@ -423,11 +430,11 @@ export default class Board extends React.Component {
   //TODO
   //Handles board presses and grabs input from inputbuttons if triggered
   boardClickHandler(e) {
+    this.playClick();
     for(let i = 0; i < this.state.board.length; i++){
       if(this.state.board[i].select)
         this.state.board[i].select = false;
     }
-
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
     //console.log(area.id);
@@ -467,6 +474,14 @@ export default class Board extends React.Component {
     );
   }
 
+  async playClick(){
+    
+    const playbackObject = await Expo.Audio.Sound.create(
+       require("./assets/sounds/click.mp3"),
+      { shouldPlay: true },
+    );
+  }
+   
   renderInputButtons(){
     let views = [];
     
@@ -492,7 +507,7 @@ export default class Board extends React.Component {
     //console.log(backgroundUrl);
     return (
       <View style={styles.gameScreen}>
-        <Image style={styles.background} source={require('./assets/background1.png')}>
+        <Image style={styles.background} source={backgroundUrl}>
           <View>
             <Button style={styles.inputButtonStyle} onPress= {() =>this.playMusic()} title={"Play Music"}/>
             <Button style={styles.inputButtonStyle} onPress= {() =>this.setBackground()} title={"backgroundButton"}/>
@@ -510,6 +525,11 @@ export default class Board extends React.Component {
                 <View style={styles.board}/>
               </TouchableWithoutFeedback>
             </View>
+          </View>
+          <View style={styles.topMenu}> 
+            <Button onPress= {() =>this.setBackground()} title={"Change Background"}/>
+            <Button onPress= {() =>this.playMusic()} title={"Play Music"}/>
+            <Button onPress= {() =>this.playMusic()} title={"Options"}/>
           </View>
           <View style={styles.userInputContainer}>
           { 
@@ -715,9 +735,11 @@ const styles = StyleSheet.create({
     width:"20px",
     height:"20px",
     backgroundColor: "green",
-    // position: "absolute",
-    // left:"100px",
-    // top:"100px",
+  },
+
+  topMenu:{
+    flexDirection:'row',
+    opacity:.6,
   },
 
   inputRow: {
