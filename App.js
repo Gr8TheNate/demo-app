@@ -1,122 +1,312 @@
 import React,{Component}from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight, TouchableNativeFeedback, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Button } from 'react-native';
+
+import { Sudoku } from './algorithm'
+
+//Get sudoku from sudoku Generator
+var sudokuPuzzle = Sudoku;
 
 
 
 //Init rendered board data
 var renderedBoardData = [
   //Column 1
-  {startX:3,startY:3,endX:36,endY:36,id:1,value:"0"},
-  {startX:3,startY:39,endX:36,endY:72,id:2,value:"0"},
-  {startX:3,startY:75,endX:36,endY:108,id:3,value:"0"},
-  {startX:3,startY:111,endX:36,endY:144,id:4,value:"0"},
-  {startX:3,startY:147,endX:36,endY:180,id:5,value:"0"},
-  {startX:3,startY:183,endX:36,endY:216,id:6,value:"0"},
-  {startX:3,startY:219,endX:36,endY:252,id:7,value:"0"},
-  {startX:3,startY:255,endX:36,endY:288,id:8,value:"0"},
-  {startX:3,startY:291,endX:36,endY:324,id:9,value:"0"},
+  {startX:3,startY:3,endX:36,endY:36,id:1,value:"0", select: false},
+  {startX:3,startY:39,endX:36,endY:72,id:2,value:"0", select: false},
+  {startX:3,startY:75,endX:36,endY:108,id:3,value:"0", select: false},
+  {startX:3,startY:111,endX:36,endY:144,id:4,value:"0", select: false},
+  {startX:3,startY:147,endX:36,endY:180,id:5,value:"0", select: false},
+  {startX:3,startY:183,endX:36,endY:216,id:6,value:"0", select: false},
+  {startX:3,startY:219,endX:36,endY:252,id:7,value:"0", select: false},
+  {startX:3,startY:255,endX:36,endY:288,id:8,value:"0", select: false},
+  {startX:3,startY:291,endX:36,endY:324,id:9,value:"0", select: false},
   //Column 2
-  {startX:39,startY:3,endX:72,endY:36,id:0,value:"0"},
-  {startX:39,startY:39,endX:72,endY:72,id:0,value:"0"},
-  {startX:39,startY:75,endX:72,endY:108,id:0,value:"0"},
-  {startX:39,startY:111,endX:72,endY:144,id:0,value:"0"},
-  {startX:39,startY:147,endX:72,endY:180,id:0,value:"0"},
-  {startX:39,startY:183,endX:72,endY:216,id:0,value:"0"},
-  {startX:39,startY:219,endX:72,endY:252,id:0,value:"0"},
-  {startX:39,startY:255,endX:72,endY:288,id:0,value:"0"},
-  {startX:39,startY:291,endX:72,endY:324,id:0,value:"0"},
+  {startX:39,startY:3,endX:72,endY:36,id:0,value:"0", select: false},
+  {startX:39,startY:39,endX:72,endY:72,id:0,value:"0", select: false},
+  {startX:39,startY:75,endX:72,endY:108,id:0,value:"0", select: false},
+  {startX:39,startY:111,endX:72,endY:144,id:0,value:"0", select: false},
+  {startX:39,startY:147,endX:72,endY:180,id:0,value:"0", select: false},
+  {startX:39,startY:183,endX:72,endY:216,id:0,value:"0", select: false},
+  {startX:39,startY:219,endX:72,endY:252,id:0,value:"0", select: false},
+  {startX:39,startY:255,endX:72,endY:288,id:0,value:"0", select: false},
+  {startX:39,startY:291,endX:72,endY:324,id:0,value:"0", select: false},
   //Column 3
-  {startX:75,startY:3,endX:108,endY:36,id:0,value:"0"},
-  {startX:75,startY:39,endX:108,endY:72,id:0,value:"0"},
-  {startX:75,startY:75,endX:108,endY:108,id:0,value:"0"},
-  {startX:75,startY:111,endX:108,endY:144,id:0,value:"0"},
-  {startX:75,startY:147,endX:108,endY:180,id:0,value:"0"},
-  {startX:75,startY:183,endX:108,endY:216,id:0,value:"0"},
-  {startX:75,startY:219,endX:108,endY:252,id:0,value:"0"},
-  {startX:75,startY:255,endX:108,endY:288,id:0,value:"0"},
-  {startX:75,startY:291,endX:108,endY:324,id:0,value:"0"},
+  {startX:75,startY:3,endX:108,endY:36,id:0,value:"0", select: false},
+  {startX:75,startY:39,endX:108,endY:72,id:0,value:"0", select: false},
+  {startX:75,startY:75,endX:108,endY:108,id:0,value:"0", select: false},
+  {startX:75,startY:111,endX:108,endY:144,id:0,value:"0", select: false},
+  {startX:75,startY:147,endX:108,endY:180,id:0,value:"0", select: false},
+  {startX:75,startY:183,endX:108,endY:216,id:0,value:"0", select: false},
+  {startX:75,startY:219,endX:108,endY:252,id:0,value:"0", select: false},
+  {startX:75,startY:255,endX:108,endY:288,id:0,value:"0", select: false},
+  {startX:75,startY:291,endX:108,endY:324,id:0,value:"0", select: false},
   //Column 4
-  {startX:111,startY:3,endX:144,endY:36,id:0,value:"0"},
-  {startX:111,startY:39,endX:144,endY:72,id:0,value:"0"},
-  {startX:111,startY:75,endX:144,endY:108,id:0,value:"0"},
-  {startX:111,startY:111,endX:144,endY:144,id:0,value:"0"},
-  {startX:111,startY:147,endX:144,endY:180,id:0,value:"0"},
-  {startX:111,startY:183,endX:144,endY:216,id:0,value:"0"},
-  {startX:111,startY:219,endX:144,endY:252,id:0,value:"0"},
-  {startX:111,startY:255,endX:144,endY:288,id:0,value:"0"},
-  {startX:111,startY:291,endX:144,endY:324,id:0,value:"0"},
+  {startX:111,startY:3,endX:144,endY:36,id:0,value:"0", select: false},
+  {startX:111,startY:39,endX:144,endY:72,id:0,value:"0", select: false},
+  {startX:111,startY:75,endX:144,endY:108,id:0,value:"0", select: false},
+  {startX:111,startY:111,endX:144,endY:144,id:0,value:"0", select: false},
+  {startX:111,startY:147,endX:144,endY:180,id:0,value:"0", select: false},
+  {startX:111,startY:183,endX:144,endY:216,id:0,value:"0", select: false},
+  {startX:111,startY:219,endX:144,endY:252,id:0,value:"0", select: false},
+  {startX:111,startY:255,endX:144,endY:288,id:0,value:"0", select: false},
+  {startX:111,startY:291,endX:144,endY:324,id:0,value:"0", select: false},
   //Column 5
-  {startX:147,startY:3,endX:180,endY:36,id:0,value:"0"},
-  {startX:147,startY:39,endX:180,endY:72,id:0,value:"0"},
-  {startX:147,startY:75,endX:180,endY:108,id:0,value:"0"},
-  {startX:147,startY:111,endX:180,endY:144,id:0,value:"0"},
-  {startX:147,startY:147,endX:180,endY:180,id:0,value:"0"},
-  {startX:147,startY:183,endX:180,endY:216,id:0,value:"0"},
-  {startX:147,startY:219,endX:180,endY:252,id:0,value:"0"},
-  {startX:147,startY:255,endX:180,endY:288,id:0,value:"0"},
-  {startX:147,startY:291,endX:180,endY:324,id:0,value:"0"},
+  {startX:147,startY:3,endX:180,endY:36,id:0,value:"0", select: false},
+  {startX:147,startY:39,endX:180,endY:72,id:0,value:"0", select: false},
+  {startX:147,startY:75,endX:180,endY:108,id:0,value:"0", select: false},
+  {startX:147,startY:111,endX:180,endY:144,id:0,value:"0", select: false},
+  {startX:147,startY:147,endX:180,endY:180,id:0,value:"0", select: false},
+  {startX:147,startY:183,endX:180,endY:216,id:0,value:"0", select: false},
+  {startX:147,startY:219,endX:180,endY:252,id:0,value:"0", select: false},
+  {startX:147,startY:255,endX:180,endY:288,id:0,value:"0", select: false},
+  {startX:147,startY:291,endX:180,endY:324,id:0,value:"0", select: false},
   //Column 6
-  {startX:183,startY:3,endX:216,endY:36,id:0,value:"0"},
-  {startX:183,startY:39,endX:216,endY:72,id:0,value:"0"},
-  {startX:183,startY:75,endX:216,endY:108,id:0,value:"0"},
-  {startX:183,startY:111,endX:216,endY:144,id:0,value:"0"},
-  {startX:183,startY:147,endX:216,endY:180,id:0,value:"0"},
-  {startX:183,startY:183,endX:216,endY:216,id:0,value:"0"},
-  {startX:183,startY:219,endX:216,endY:252,id:0,value:"0"},
-  {startX:183,startY:255,endX:216,endY:288,id:0,value:"0"},
-  {startX:183,startY:291,endX:216,endY:324,id:0,value:"0"},
+  {startX:183,startY:3,endX:216,endY:36,id:0,value:"0", select: false},
+  {startX:183,startY:39,endX:216,endY:72,id:0,value:"0", select: false},
+  {startX:183,startY:75,endX:216,endY:108,id:0,value:"0", select: false},
+  {startX:183,startY:111,endX:216,endY:144,id:0,value:"0", select: false},
+  {startX:183,startY:147,endX:216,endY:180,id:0,value:"0", select: false},
+  {startX:183,startY:183,endX:216,endY:216,id:0,value:"0", select: false},
+  {startX:183,startY:219,endX:216,endY:252,id:0,value:"0", select: false},
+  {startX:183,startY:255,endX:216,endY:288,id:0,value:"0", select: false},
+  {startX:183,startY:291,endX:216,endY:324,id:0,value:"0", select: false},
   //Column 7
-  {startX:219,startY:3,endX:252,endY:36,id:0,value:"0"},
-  {startX:219,startY:39,endX:252,endY:72,id:0,value:"0"},
-  {startX:219,startY:75,endX:252,endY:108,id:0,value:"0"},
-  {startX:219,startY:111,endX:252,endY:144,id:0,value:"0"},
-  {startX:219,startY:147,endX:252,endY:180,id:0,value:"0"},
-  {startX:219,startY:183,endX:252,endY:216,id:0,value:"0"},
-  {startX:219,startY:219,endX:252,endY:252,id:0,value:"0"},
-  {startX:219,startY:255,endX:252,endY:288,id:0,value:"0"},
-  {startX:219,startY:291,endX:252,endY:324,id:0,value:"0"},
+  {startX:219,startY:3,endX:252,endY:36,id:0,value:"0", select: false},
+  {startX:219,startY:39,endX:252,endY:72,id:0,value:"0", select: false},
+  {startX:219,startY:75,endX:252,endY:108,id:0,value:"0", select: false},
+  {startX:219,startY:111,endX:252,endY:144,id:0,value:"0", select: false},
+  {startX:219,startY:147,endX:252,endY:180,id:0,value:"0", select: false},
+  {startX:219,startY:183,endX:252,endY:216,id:0,value:"0", select: false},
+  {startX:219,startY:219,endX:252,endY:252,id:0,value:"0", select: false},
+  {startX:219,startY:255,endX:252,endY:288,id:0,value:"0", select: false},
+  {startX:219,startY:291,endX:252,endY:324,id:0,value:"0", select: false},
   //Column 8
-  {startX:255,startY:3,endX:288,endY:36,id:0,value:"0"},
-  {startX:255,startY:39,endX:288,endY:72,id:0,value:"0"},
-  {startX:255,startY:75,endX:288,endY:108,id:0,value:"0"},
-  {startX:255,startY:111,endX:288,endY:144,id:0,value:"0"},
-  {startX:255,startY:147,endX:288,endY:180,id:0,value:"0"},
-  {startX:255,startY:183,endX:288,endY:216,id:0,value:"0"},
-  {startX:255,startY:219,endX:288,endY:252,id:0,value:"0"},
-  {startX:255,startY:255,endX:288,endY:288,id:0,value:"0"},
-  {startX:255,startY:291,endX:288,endY:324,id:0,value:"0"},
+  {startX:255,startY:3,endX:288,endY:36,id:0,value:"0", select: false},
+  {startX:255,startY:39,endX:288,endY:72,id:0,value:"0", select: false},
+  {startX:255,startY:75,endX:288,endY:108,id:0,value:"0", select: false},
+  {startX:255,startY:111,endX:288,endY:144,id:0,value:"0", select: false},
+  {startX:255,startY:147,endX:288,endY:180,id:0,value:"0", select: false},
+  {startX:255,startY:183,endX:288,endY:216,id:0,value:"0", select: false},
+  {startX:255,startY:219,endX:288,endY:252,id:0,value:"0", select: false},
+  {startX:255,startY:255,endX:288,endY:288,id:0,value:"0", select: false},
+  {startX:255,startY:291,endX:288,endY:324,id:0,value:"0", select: false},
   //Column 9
-  {startX:291,startY:3,endX:327,endY:36,id:0,value:"0"},
-  {startX:291,startY:39,endX:327,endY:72,id:0,value:"0"},
-  {startX:291,startY:75,endX:327,endY:108,id:0,value:"0"},
-  {startX:291,startY:111,endX:327,endY:144,id:0,value:"0"},
-  {startX:291,startY:147,endX:327,endY:180,id:0,value:"0"},
-  {startX:291,startY:183,endX:327,endY:216,id:0,value:"0"},
-  {startX:291,startY:219,endX:327,endY:252,id:0,value:"0"},
-  {startX:291,startY:255,endX:327,endY:288,id:0,value:"0"},
-  {startX:291,startY:291,endX:327,endY:324,id:0,value:"0"},
+  {startX:291,startY:3,endX:327,endY:36,id:0,value:"0", select: false},
+  {startX:291,startY:39,endX:327,endY:72,id:0,value:"0", select: false},
+  {startX:291,startY:75,endX:327,endY:108,id:0,value:"0", select: false},
+  {startX:291,startY:111,endX:327,endY:144,id:0,value:"0", select: false},
+  {startX:291,startY:147,endX:327,endY:180,id:0,value:"0", select: false},
+  {startX:291,startY:183,endX:327,endY:216,id:0,value:"0", select: false},
+  {startX:291,startY:219,endX:327,endY:252,id:0,value:"0", select: false},
+  {startX:291,startY:255,endX:327,endY:288,id:0,value:"0", select: false},
+  {startX:291,startY:291,endX:327,endY:324,id:0,value:"0", select: false},
 ];
 
-//Highlighted Square drawn onto board
-// class SelectedSquare extends React.Component{
-//   render(){
-//     const { startX, startY, endX, endY, id, value} = this.props;
-//     return(
-//       <View>
-//         <View style={[styles.selectedLine, {transform: [{translateX: startX ? Math.floor(startX)-1 : 0 },{translateY: startY ? Math.floor(startY) : 0 }]}] }/>
-//         <View style={[styles.selectedLine, {transform: [{translateX: endX ? (Math.floor(endX)-1) : 36 },{translateY: startY ? Math.floor(startY) : 0 }]}]}/>
-//         <View style={[styles.selectedLine, {height: 3, width: 39, transform: [{translateY: startY ? Math.floor(startY) : 0 },{translateX: startX ? Math.floor(startX) - 1 : 0 }]}]}/>
-//         <View style={[styles.selectedLine, {height: 3, width: 39, transform: [{translateY: endY ? Math.floor(endY) : 36 },{translateX: startX ? Math.floor(startX) - 1 : 0 }]}]}/>
-//       </View>
-//     );
-//   }
-// }
+//Grid drawn to board
+class Grid extends React.Component{
+  render(){
+    return(
+      <View key={"grid"}>
+        <View 
+          key={"left border"}
+          style={[styles.line,
+            {
+              width:0,
+              height: 327,
+              transform: [{translateX: 0}, {translateY: 0}]
+            }
+          ]}
+        />
+        <View 
+          key={"vert 1"}
+          style={styles.line}
+        />
+        <View 
+          key={"vert 2"}
+          style={[styles.line,
+            {transform : [{translateX: 73},{translateY: 3}]}
+          ]}
+        />
+        <View 
+          key={"vert 3 bold"}
+          style={[styles.line,
+            {
+              width: 3,
+              transform : [{translateX: 108},{translateY: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"vert 4"}
+          style={[styles.line,
+            {transform : [{translateX: 145},{translateY: 3}]}
+          ]}
+        />
+        <View 
+          key={"vert 5"}
+          style={[styles.line,
+            {transform : [{translateX: 181},{translateY: 3}]}
+          ]}
+        />
+        <View 
+          key={"vert 6 bold"}
+          style={[styles.line,
+            {
+              width: 3,
+              transform : [{translateX: 216},{translateY: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"vert 7"}
+          style={[styles.line,
+            {transform : [{translateX: 253},{translateY: 3}]}
+          ]}
+        />
+        <View 
+          key={"vert 8"}
+          style={[styles.line,
+            {transform : [{translateX: 289},{translateY: 3}]}
+          ]}
+        />
+        <View 
+          key={"right border"}
+          style={[styles.line,
+            {
+              width: 0,
+              height: 327,
+              transform: [{translateX: 324}, {translateY: 0}]
+            }
+          ]}
+        />
+        <View 
+          key={"top border"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 0,
+              width: 327,
+              transform: [{translateX: 0}, {translateY: 0}]
+            }
+          ]}
+        />
+        <View 
+          key={"horizon 1"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 1,
+              width: 321,
+              // transform : [{translateY: 36},{translateX: 3}]
+              transform : [{translateY: 37},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"horizon 2"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 1,
+              width: 321,
+              //transform : [{translateY: 72},{translateX: 3}]
+              transform : [{translateY: 73},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"horizon 3 bold"}
+          style={[styles.line, 
+            {
+              height: 3,
+              width: 321,
+              transform : [{translateY: 108},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+        key={"horizon 4"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 1,
+              width: 321,
+              //transform : [{translateY: 144},{translateX: 3}]
+              transform : [{translateY: 145},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"horizon 5"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 1,
+              width: 321,
+              //transform : [{translateY: 180},{translateX: 3}]
+              transform : [{translateY: 181},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"horizon 6 bold"}
+          style={[styles.line,
+            {
+              height: 3,
+              width: 321,
+              //transform : [{translateY: 216},{translateX: 3}]
+              transform : [{translateY: 217},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"horizon 7"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 1,
+              width: 321,
+              //transform : [{translateY: 252},{translateX: 3}]
+              transform : [{translateY: 253},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"horizon 8"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 1,
+              width: 321,
+              //transform : [{translateY: 288},{translateX: 3}]
+              transform : [{translateY: 289},{translateX: 3}]
+            }
+          ]}
+        />
+        <View 
+          key={"bottom border"}
+          style={[styles.line,
+            {
+              //height: 3,
+              height: 0,
+              width: 327,
+              transform: [{translateX: 0}, {translateY: 324}]
+            }
+          ]}
+        />
+      </View>
+    )
+  }
+}
+
 //Square that receives value from the puzzle or player
 class Square extends React.Component {
   render(){
-    const { startX, startY, id, value, select} = this.props;
+    const { startX, startY, id, value, select, locked} = this.props;
     return(
-      <View style={[styles.square,{
+      <View
+        style={[styles.square,{
+        backgroundColor: (locked ? "lightgreen" : "green"),
         borderWidth: (select ? 3 : 0),
         borderColor: "yellow", 
         transform: [{translateX: startX}, {translateY: startY}]
@@ -197,50 +387,56 @@ export default class Board extends React.Component {
   constructor(){
     super();
     this.state = {
-      puzzle: renderBoardData(), //sudoku Puzzle array
+      board: renderedBoardData,
+      //puzzle: renderBoardData(), //sudoku Puzzle array
       select: false,        //If true, input button sends selected input to selected square
       userInputs: [],       //unsolved sudoku Puzzle array with empty spots for user entry 
       area: {startX: 0,startY: 0, endX: 0, endY:0 ,id:0 ,value: 0},           //selected area on board
       background :require("./assets/background1.png"),
     };
-   // require("./assets/background1.png")
-    //TODO!!!
-    function renderBoardData(){
-      let newPuzzle = [];
-      let x1, y1, value; 
-  
-      for(let i = 0; i < renderedBoardData.length; i++){
-        x1 = renderedBoardData[i].startX;
-        y1 = renderedBoardData[i].startY;
-        value = sudokuPuzzle[i];
-        newPuzzle.push(
-          <Square key={i} startX={x1} startY={y1} value={value} />
-        );
-      } 
-      return newPuzzle;
+  }
+
+  renderBoardData(renderedBoardData){
+    let newPuzzle = [];
+    let x1, y1, value, select, locked; 
+
+    for(let i = 0; i < renderedBoardData.length; i++){
+      x1 = renderedBoardData[i].startX;
+      y1 = renderedBoardData[i].startY;
+      value = renderedBoardData[i].value;
+      select = renderedBoardData[i].select;
+      //locked = renderedBoardData[i].locked;
+      newPuzzle.push(
+        <Square key={i} startX={x1} startY={y1} id={i+1} value={value} select={select} locked={locked} />
+      );
     } 
+    return newPuzzle;
   }
 
 
   //TODO
   //Handles board presses and grabs input from inputbuttons if triggered
   boardClickHandler(e) {
+    for(let i = 0; i < this.state.board.length; i++){
+      if(this.state.board[i].select)
+        this.state.board[i].select = false;
+    }
+
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
     //console.log(area.id);
-    var puzzle = this.state.puzzle;
+
+    var selectedSquare = this.state.board.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
+    //console.log(selectedSquare);
+
+    if(!selectedSquare) return;
+    selectedSquare.value = (parseInt(selectedSquare.value) < 9 ? parseInt(selectedSquare.value) + 1 : "0");
+    selectedSquare.select = true;
 
     this.setState({
       select: true,
       area: area,
     });
-
-    // for(let i = 0; i < puzzle.length; i++){
-    //   if((puzzle[i].startX >= area.startX && puzzle[i].endX <= area.endX) && (puzzle[i].startY >= area.startY && puzzle[i].endY >= area.endY)){
-    //     puzzle[i].select = this.state.select;
-    //   }
-    // }
-
   }
 
   setBackground(){
@@ -323,230 +519,35 @@ export default class Board extends React.Component {
     console.log(backgroundUrl);
     return (
       <View style={styles.gameScreen}>
-          <Image style={styles.background} source={backgroundUrl}>
-        <View>
-          <Text>Test</Text>
-          <Button style={styles.inputButtonStyle} onPress= {() =>this.playMusic()} title={"Play Music"}/>
-          <Button style={styles.inputButtonStyle} onPress= {() =>this.setBackground()} title={"backgroundButton"}/>
-        </View>
-        <View style={styles.timer}>
-           <BlinkingClass/>
-        </View>
-        <View style={styles.container}>
-          <TouchableNativeFeedback onPress={e => this.boardClickHandler(e)}>
-            <View key={"board"} style={styles.board}>
-              <View key={"grid"}>
-                <View 
-                  key={"left border"}
-                  style={[styles.line,
-                    {
-                      width:0,
-                      height: 327,
-                      transform: [{translateX: 0}, {translateY: 0}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"vert 1"}
-                  style={styles.line}
-                />
-                <View 
-                  key={"vert 2"}
-                  style={[styles.line,
-                    {transform : [{translateX: 73},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 3 bold"}
-                  style={[styles.line,
-                    {
-                      width: 3,
-                      transform : [{translateX: 108},{translateY: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"vert 4"}
-                  style={[styles.line,
-                    {transform : [{translateX: 145},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 5"}
-                  style={[styles.line,
-                    {transform : [{translateX: 181},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 6 bold"}
-                  style={[styles.line,
-                    {
-                      width: 3,
-                      transform : [{translateX: 216},{translateY: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"vert 7"}
-                  style={[styles.line,
-                    {transform : [{translateX: 253},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"vert 8"}
-                  style={[styles.line,
-                    {transform : [{translateX: 289},{translateY: 3}]}
-                  ]}
-                />
-                <View 
-                  key={"right border"}
-                  style={[styles.line,
-                    {
-                      width: 0,
-                      height: 327,
-                      transform: [{translateX: 324}, {translateY: 0}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"top border"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 0,
-                      width: 327,
-                      transform: [{translateX: 0}, {translateY: 0}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 1"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      // transform : [{translateY: 36},{translateX: 3}]
-                      transform : [{translateY: 37},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 2"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 72},{translateX: 3}]
-                      transform : [{translateY: 73},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 3 bold"}
-                  style={[styles.line, 
-                    {
-                      height: 3,
-                      width: 321,
-                      transform : [{translateY: 108},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                key={"horizon 4"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 144},{translateX: 3}]
-                      transform : [{translateY: 145},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 5"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 180},{translateX: 3}]
-                      transform : [{translateY: 181},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 6 bold"}
-                  style={[styles.line,
-                    {
-                      height: 3,
-                      width: 321,
-                      //transform : [{translateY: 216},{translateX: 3}]
-                      transform : [{translateY: 217},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 7"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 252},{translateX: 3}]
-                      transform : [{translateY: 253},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"horizon 8"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 1,
-                      width: 321,
-                      //transform : [{translateY: 288},{translateX: 3}]
-                      transform : [{translateY: 289},{translateX: 3}]
-                    }
-                  ]}
-                />
-                <View 
-                  key={"bottom border"}
-                  style={[styles.line,
-                    {
-                      //height: 3,
-                      height: 0,
-                      width: 327,
-                      transform: [{translateX: 0}, {translateY: 324}]
-                    }
-                  ]}
-                />
-              </View>
+        <Image style={styles.background} source={require('./assets/background1.png')}>
+          <View>
+            <Text>Test</Text>
+          </View>
+          <View style={styles.timer}>
+            <BlinkingClass/>
+          </View>
+          <View style={styles.container}>
+            <View ref='board' style={styles.board}>
+              <Grid/>
               {
-                //TODO!!!!!
-                //this.renderBoardData()
-                this.state.puzzle.map((x,i) => {
-                  if(i<81)
-                    return this.state.puzzle[i];
-                })
+                //Draws squares to board
+                // this.state.puzzle.map((x,i) => {
+                //   if(i<81){
+                //     return this.state.puzzle[i];
+                //   }  
+                // })
+                this.renderBoardData(this.state.board)
               }
-              {
-              /*<View style={styles.board}> 
-              {
-                this.selectSquare(this.state.area)
-              }  
-              </View>
-              */} 
+              <TouchableWithoutFeedback key={"touchable grid"}onPress={e => this.boardClickHandler(e)}>
+                <View style={styles.board}/>
+              </TouchableWithoutFeedback>
             </View>
-          </TouchableNativeFeedback>
-        </View>
-        <View style={styles.userInputContainer}>
+          </View>
+          <View style={styles.userInputContainer}>
           { 
             this.renderInputButtons(this.state.area)
           }
-        </View>
+          </View>
         </Image>
       </View>
     );
