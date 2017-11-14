@@ -417,11 +417,11 @@ export default class Board extends React.Component {
   //TODO
   //Handles board presses and grabs input from inputbuttons if triggered
   boardClickHandler(e) {
+    this.playClick();
     for(let i = 0; i < this.state.board.length; i++){
       if(this.state.board[i].select)
         this.state.board[i].select = false;
     }
-
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
     //console.log(area.id);
@@ -460,40 +460,15 @@ export default class Board extends React.Component {
       { shouldPlay: true },
     );
   }
-   
-  // renderBoardData(){
-  //   let newPuzzle = [];
-  //   let x1, y1, value; 
 
-  //   for(let i = 0; i < renderedBoardData.length; i++){
-  //     x1 = renderedBoardData[i].startX;
-  //     y1 = renderedBoardData[i].startY;
-  //     value = sudokuPuzzle[i];
-  //     newPuzzle.push(
-  //       <Square key={i} startX={x1} startY={y1} value={value} />
-  //     );
-  //   }  
+  async playClick(){
     
-  //   // this.setState({
-  //   //   puzzle: newPuzzle,
-  //   // });
-
-  //   return newPuzzle;
-  // }
-
-  // selectSquare(i){
-  //   return(
-  //     <SelectedSquare
-  //       key={i.id}
-  //       startX={i.startX}
-  //       startY={i.startY}
-  //       endX={i.endX}
-  //       endY={i.endY}
-  //     />
-  //   );
-  // }
-
-
+    const playbackObject = await Expo.Audio.Sound.create(
+       require("./assets/sounds/click.mp3"),
+      { shouldPlay: true },
+    );
+  }
+   
   renderInputButtons(){
     let views = [];
     
