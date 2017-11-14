@@ -317,7 +317,7 @@ class Square extends React.Component {
           fontWeight: 'bold',
           opacity:1,
           }}
-          > {value} </Text>
+          > {(value == 0 ? " ": value.toString() )} </Text>
       </View>
     );
   }
@@ -389,19 +389,33 @@ export default class Board extends React.Component {
 
   constructor(){
     super();
-
-    //sudoku.init;
     
-    //DUMMY ARRAY
-    var solvedPuzzled = []; //sudoku.solve;
-    for(let i = 1; i <= 81; i++){
-      solvedPuzzled[i] = i%9;
+//////TEST ARRAY////////////////////////////////////////////////////////
+    var solvedPuzzle = [4,6,1,8,3,9,5,2,7,3,8,9,2,7,5,1,4,6,5,2,7,6,4,1,9,8,3,2,5,8,1,6,7,3,9,4,6,7,3,9,8,4,2,5,1,9,1,4,5,2,3,6,7,8,7,4,5,3,9,6,8,1,2,8,9,6,4,1,2,7,3,5,1,3,2,7,5,8,4,6,9]; //sudoku.solve;
+    //console.log(solvedPuzzled.length);
+    var unsolvedPuzzle = solvedPuzzle.slice();
+    for(let i = 0; i < 20; i++){
+      var value = getRandom();
+      unsolvedPuzzle[value] = 0;
     }
-    console.log(solvedPuzzled);
+    //console.log(unsolvedPuzzle);
+    function getRandom(){
+       return Math.floor(Math.random() * 80);
+    }
+
+    var boardData = renderedBoardData;
+    for(let x = 0; x < boardData.length; x++){
+      boardData[x].value = unsolvedPuzzle[x];
+      if(boardData[x].value != 0){
+        boardData[x].locked = true;
+      }
+    }
+    //console.log(boardData);
+///////////////////////////////////////////////////////
 
     this.state = {
       board: renderedBoardData,
-      //puzzle: renderBoardData(), //sudoku Puzzle array
+      puzzle: solvedPuzzle, //sudoku Puzzle array
       select: false,        //If true, input button sends selected input to selected square
       userInputs: [],       //unsolved sudoku Puzzle array with empty spots for user entry 
       area: {startX: 0,startY: 0, endX: 0, endY:0 ,id:0 ,value: 0},           //selected area on board
@@ -418,7 +432,7 @@ export default class Board extends React.Component {
       y1 = renderedBoardData[i].startY;
       value = renderedBoardData[i].value;
       select = renderedBoardData[i].select;
-      //locked = renderedBoardData[i].locked;
+      locked = renderedBoardData[i].locked;
       newPuzzle.push(
         <Square key={i} startX={x1} startY={y1} id={i+1} value={value} select={select} locked={locked} />
       );
@@ -443,7 +457,9 @@ export default class Board extends React.Component {
     //console.log(selectedSquare);
 
     if(!selectedSquare) return;
-    selectedSquare.value = (parseInt(selectedSquare.value) < 9 ? parseInt(selectedSquare.value) + 1 : "0");
+    else if(!selectedSquare.locked){
+      selectedSquare.value = (parseInt(selectedSquare.value) < 9 ? parseInt(selectedSquare.value) + 1 : "0");
+    }
     selectedSquare.select = true;
 
     this.setState({
@@ -508,12 +524,8 @@ export default class Board extends React.Component {
     return (
       <View style={styles.gameScreen}>
         <Image style={styles.background} source={backgroundUrl}>
-          <View>
-            <Button style={styles.inputButtonStyle} onPress= {() =>this.playMusic()} title={"Play Music"}/>
-            <Button style={styles.inputButtonStyle} onPress= {() =>this.setBackground()} title={"backgroundButton"}/>
-          </View>
           <View style={styles.timer}>
-            <BlinkingClass/>
+            <Timer/>
           </View>
           <View style={styles.container}>
             <View ref='board' style={styles.board}>
@@ -542,7 +554,7 @@ export default class Board extends React.Component {
   }
 } 
 
-class BlinkingClass extends Component {
+class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -689,7 +701,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 2,
     alignSelf: 'center',
-    //justifyContent: 'center',
     marginTop: 20,
   },
  
@@ -739,6 +750,7 @@ const styles = StyleSheet.create({
 
   topMenu:{
     flexDirection:'row',
+    justifyContent: 'center',
     opacity:.6,
   },
 
