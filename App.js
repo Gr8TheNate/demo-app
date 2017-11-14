@@ -354,16 +354,6 @@ class InputButton extends React.Component{
         userInput : value,
         area : this.props.area,
       });
-     
-      // let match = renderedInputData.find(d => (d.id == val))
-
-      // console.log(match.id);
-     
-
-      // renderedInputData.map(obj => match.find(o => o.id === obj.id) || obj)
-
-      //console.log(renderedInputData, "userinputSelectedArea");
-      //return this.state.select;
     }
 
     render(){
@@ -384,42 +374,43 @@ const inputButtons = [
   [6, 7, 8, 9, 'X'],
 ];
 
+//////TEST ARRAY////////////////////////////////////////////////////////
+var solvedPuzzle = [4,6,1,8,3,9,5,2,7,3,8,9,2,7,5,1,4,6,5,2,7,6,4,1,9,8,3,2,5,8,1,6,7,3,9,4,6,7,3,9,8,4,2,5,1,9,1,4,5,2,3,6,7,8,7,4,5,3,9,6,8,1,2,8,9,6,4,1,2,7,3,5,1,3,2,7,5,8,4,6,9]; //sudoku.solve;
+
+var unsolvedPuzzle = solvedPuzzle.slice();
+for(let i = 0; i < 20; i++){
+  var value = getRandom();
+  unsolvedPuzzle[value] = 0;
+}
+
+function getRandom(){
+   return Math.floor(Math.random() * 80);
+}
+
+var boardData = renderedBoardData;
+for(let x = 0; x < boardData.length; x++){
+  boardData[x].value = unsolvedPuzzle[x];
+  if(boardData[x].value != 0){
+    boardData[x].locked = true;
+  }
+}
+///////////////////////////////////////////////////////
+
+
 //Main Board 
 export default class Board extends React.Component { 
 
   constructor(){
     super();
-    
-//////TEST ARRAY////////////////////////////////////////////////////////
-    var solvedPuzzle = [4,6,1,8,3,9,5,2,7,3,8,9,2,7,5,1,4,6,5,2,7,6,4,1,9,8,3,2,5,8,1,6,7,3,9,4,6,7,3,9,8,4,2,5,1,9,1,4,5,2,3,6,7,8,7,4,5,3,9,6,8,1,2,8,9,6,4,1,2,7,3,5,1,3,2,7,5,8,4,6,9]; //sudoku.solve;
-    //console.log(solvedPuzzled.length);
-    var unsolvedPuzzle = solvedPuzzle.slice();
-    for(let i = 0; i < 20; i++){
-      var value = getRandom();
-      unsolvedPuzzle[value] = 0;
-    }
-    //console.log(unsolvedPuzzle);
-    function getRandom(){
-       return Math.floor(Math.random() * 80);
-    }
-
-    var boardData = renderedBoardData;
-    for(let x = 0; x < boardData.length; x++){
-      boardData[x].value = unsolvedPuzzle[x];
-      if(boardData[x].value != 0){
-        boardData[x].locked = true;
-      }
-    }
-    //console.log(boardData);
-///////////////////////////////////////////////////////
 
     this.state = {
-      board: renderedBoardData,
-      puzzle: solvedPuzzle, //sudoku Puzzle array
-      select: false,        //If true, input button sends selected input to selected square
-      userInputs: [],       //unsolved sudoku Puzzle array with empty spots for user entry 
+      board: renderedBoardData,    //coordinate array with position for squares
+      puzzle: solvedPuzzle,        //solved sudoku Puzzle array
+      userInputs: boardData,       //unsolved sudoku Puzzle array with empty spots for user entry 
       area: {startX: 0,startY: 0, endX: 0, endY:0 ,id:0 ,value: 0},           //selected area on board
+      solved: false,
       background :require("./assets/background1.png"),
+      game: 0,
     };
   }
 
@@ -440,32 +431,62 @@ export default class Board extends React.Component {
     return newPuzzle;
   }
 
+  renderSolution(){
+    let boardData = renderedBoardData;
+    for(let x = 0; x < boardData.length; x++){
+      boardData[x].value = solvedPuzzle[x];
+    }
+    return this.renderBoardData(boardData);
+  }
+
 
   //TODO
   //Handles board presses and grabs input from inputbuttons if triggered
-  boardClickHandler(e) {
-    this.playClick();
-    for(let i = 0; i < this.state.board.length; i++){
-      if(this.state.board[i].select)
-        this.state.board[i].select = false;
-    }
+  boardClickHandler(e,val) {
+    
     const { locationX, locationY } = e.nativeEvent;
     const area = areas.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
-    //console.log(area.id);
+    
+    var solved = this.state.solved;
+    var newBoard = this.state.board;
+    var game = this.state.game;
 
-    var selectedSquare = this.state.board.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
-    //console.log(selectedSquare);
+    if(val == 0){
+      this.playClick();
 
-    if(!selectedSquare) return;
-    else if(!selectedSquare.locked){
-      selectedSquare.value = (parseInt(selectedSquare.value) < 9 ? parseInt(selectedSquare.value) + 1 : "0");
+      //Reset button select/ highlight on new click
+      for(let i = 0; i < this.state.board.length; i++){
+        if(this.state.board[i].select)
+          this.state.board[i].select = false;
+      }
+
+      var selectedSquare = this.state.board.find(d => (locationX >= d.startX && locationX <= d.endX ) && (locationY >= d.startY && locationY <= d.endY));
+
+      if(!selectedSquare) return;
+      else if(!selectedSquare.locked){
+        selectedSquare.value = (parseInt(selectedSquare.value) < 9 ? parseInt(selectedSquare.value) + 1 : "0");
+      }
+      selectedSquare.select = true;
     }
-    selectedSquare.select = true;
+    else if(val == 1){
+      this.renderSolution();
+      solved = true;
+    }
+    else if(val == 2){
+      this.renderBoardData(this.state.userInputs);
+      solved = false;
+    }
 
     this.setState({
-      select: true,
-      area: area,
+      //board: (val == 1 ? newBoard : this.state.board),
+      solved: solved,
+      game: (val == 2 ? game + 1 : game ),
+
     });
+
+    if(this.state.solved){
+      alert("You Win");
+    }
   }
 
   setBackground(){
@@ -476,7 +497,6 @@ export default class Board extends React.Component {
     else{
       backgroundUrl = require("./assets/background1.png");
     }
-    console.log(backgroundUrl);
     this.setState({
       background: backgroundUrl,
     });
@@ -519,8 +539,8 @@ export default class Board extends React.Component {
 
   //Main render method
   render() {
+    var solved = this.state.solved;
     var backgroundUrl = (this.state.background);
-    //console.log(backgroundUrl);
     return (
       <View style={styles.gameScreen}>
         <Image style={styles.background} source={backgroundUrl}>
@@ -528,20 +548,20 @@ export default class Board extends React.Component {
             <Timer/>
           </View>
           <View style={styles.container}>
-            <View ref='board' style={styles.board}>
+            <View style={styles.board}>
               <Grid/>
               {
                 this.renderBoardData(this.state.board)
               }
-              <TouchableWithoutFeedback key={"touchable grid"}onPress={e => this.boardClickHandler(e)}>
+              <TouchableWithoutFeedback key={"touchable grid"}onPress={e => this.boardClickHandler(e,0)}>
                 <View style={styles.board}/>
               </TouchableWithoutFeedback>
             </View>
           </View>
           <View style={styles.topMenu}> 
-            <Button onPress= {() =>this.setBackground()} title={"Change Background"}/>
+            <Button onPress= {() =>this.setBackground()} title={"Change Scene"}/>
             <Button onPress= {() =>this.playMusic()} title={"Play Music"}/>
-            <Button onPress= {() =>this.playMusic()} title={"Options"}/>
+            <Button onPress= {e => this.boardClickHandler(e,(!solved ? 1 : 2))} title={(!solved ? "Solve Puzzle" : "New Puzzle")}/>
           </View>
           <View style={styles.userInputContainer}>
           { 
@@ -789,7 +809,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-   backgroundColor: 'green',
-   opacity: .7,
+    backgroundColor: 'green',
+    opacity: .7,
   },
 });
